@@ -4,12 +4,14 @@
 
 # http://localhost:3000/companies
 
-![Alt text](https://file%252B.vscode-resource.vscode-cdn.net/var/folders/nq/8ktvxmtd7n9bg9vd3vsf6blm0000gp/T/TemporaryItems/NSIRD_screencaptureui_ikPI9t/Screenshot%25202023-11-01%2520at%25209.12.26%2520AM.png?version%253D1698855163089)
+![Screenshot 2023-11-01 at 9 21 41 AM](https://github.com/jesus-vc/postgresql-express-app/assets/52462476/053cce58-3687-42ff-b106-c35ec72036b5)
 
-![Alt text](https://file%252B.vscode-resource.vscode-cdn.net/var/folders/nq/8ktvxmtd7n9bg9vd3vsf6blm0000gp/T/TemporaryItems/NSIRD_screencaptureui_4tLDfT/Screenshot%25202023-11-01%2520at%25209.13.56%2520AM.png?version%253D1698855242231)
+![Screenshot 2023-11-01 at 9 21 57 AM](https://github.com/jesus-vc/postgresql-express-app/assets/52462476/00864611-4e4a-44e2-8854-6496861e0cfc)
+
+
 
 # http://localhost:3000/invoices
 
-![Alt text](https://file%252B.vscode-resource.vscode-cdn.net/var/folders/nq/8ktvxmtd7n9bg9vd3vsf6blm0000gp/T/TemporaryItems/NSIRD_screencaptureui_bsgzBE/Screenshot%25202023-11-01%2520at%25209.13.11%2520AM.png?version%253D1698855200295)
+![Screenshot 2023-11-01 at 9 22 14 AM](https://github.com/jesus-vc/postgresql-express-app/assets/52462476/6acc0668-731e-4feb-8ad7-061551da877f)
 
-![Alt text](https://file%252B.vscode-resource.vscode-cdn.net/var/folders/nq/8ktvxmtd7n9bg9vd3vsf6blm0000gp/T/TemporaryItems/NSIRD_screencaptureui_s6rGEu/Screenshot%25202023-11-01%2520at%25209.13.38%2520AM.png?version%253D1698855225098)
+![Screenshot 2023-11-01 at 9 22 26 AM](https://github.com/jesus-vc/postgresql-express-app/assets/52462476/0f22537b-acef-4e40-9c6c-c66d0923f1dc)
