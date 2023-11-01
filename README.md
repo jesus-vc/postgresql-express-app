@@ -1,6 +1,4 @@
-# This is an application with PostgresSQL and Express components.
-
-# There are two endpoints that fulfill the following requirements:
+# A Node.js, Express, and PostgreSQL application to query and update the two endpoints below, accompanied by screenshots of functional requirements.
 
 # http://localhost:3000/companies
 
