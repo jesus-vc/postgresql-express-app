@@ -23,13 +23,16 @@ companiesRouter.get("/", async function (req, res, next) {
 
 companiesRouter.get("/:code", async function (req, res, next) {
   try {
-    const companyCode = req.params.code;
-    const userQuery = `SELECT * FROM companies WHERE code = '${companyCode}'`;
-    const companiesResponse = await executeQueries(userQuery);
+    const { code: companyCode } = req.params;
+    const userQuery = `SELECT * FROM companies WHERE code = $1`;
+
+    const companiesResponse = await executeQueries(userQuery, [companyCode]);
 
     if (companiesResponse.rowCount > 0) {
-      const invoicesQuery = `SELECT * FROM invoices WHERE comp_code = '${companyCode}'`;
-      const invoicesResponse = await executeQueries(invoicesQuery);
+      const invoicesQuery = `SELECT * FROM invoices WHERE comp_code = $1`;
+      const invoicesResponse = await executeQueries(invoicesQuery, [
+        companyCode,
+      ]);
 
       return res.json({
         company: companiesResponse.rows[0],
@@ -46,12 +49,16 @@ companiesRouter.get("/:code", async function (req, res, next) {
 companiesRouter.post("/", async function (req, res, next) {
   try {
     const companyCode = slugify(req.body.name);
-    const putQuery = `INSERT INTO companies (code, name, description) VALUES ('${companyCode}', '${req.body.name}', '${req.body.description}')`;
+    const putQuery = `INSERT INTO companies (code, name, description) VALUES ($1, $2, $3)`;
 
-    await executeQueries(putQuery);
+    await executeQueries(putQuery, [
+      companyCode,
+      req.body.name,
+      req.body.description,
+    ]);
 
-    const getQuery = `SELECT * FROM companies WHERE code = '${companyCode}'`;
-    const getResponse = await executeQueries(getQuery);
+    const getQuery = `SELECT * FROM companies WHERE code = $1`;
+    const getResponse = await executeQueries(getQuery, [companyCode]);
 
     return res.json({ company: getResponse.rows[0] });
   } catch (error) {
@@ -61,12 +68,16 @@ companiesRouter.post("/", async function (req, res, next) {
 
 companiesRouter.put("/:code", async function (req, res, next) {
   try {
-    const updateQuery = `UPDATE companies SET name = '${req.body.name}', description = '${req.body.description}' WHERE code = '${req.params.code}'`;
+    const updateQuery = `UPDATE companies SET name = $1, description = $2 WHERE code = $3`;
 
-    await executeQueries(updateQuery);
+    await executeQueries(updateQuery, [
+      req.body.name,
+      req.body.description,
+      req.params.code,
+    ]);
 
-    const getQuery = `SELECT * FROM companies WHERE code = '${req.params.code}'`;
-    const getResponse = await executeQueries(getQuery);
+    const getQuery = `SELECT * FROM companies WHERE code = $1`;
+    const getResponse = await executeQueries(getQuery, [req.params.code]);
 
     return res.json({ company: getResponse.rows[0] });
   } catch (error) {
@@ -76,8 +87,8 @@ companiesRouter.put("/:code", async function (req, res, next) {
 
 companiesRouter.delete("/:code", async function (req, res, next) {
   try {
-    const deleteQuery = `DELETE FROM companies WHERE code = '${req.params.code}'`;
-    const response = await executeQueries(deleteQuery);
+    const deleteQuery = `DELETE FROM companies WHERE code = $1`;
+    const response = await executeQueries(deleteQuery, [req.params.code]);
     if (response.rowCount > 0) {
       return res.json({ status: "deleted" });
     } else {
