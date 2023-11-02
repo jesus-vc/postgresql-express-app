@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === "test") {
 }
 
 //TODO export to controllers if this function is being used only by routers. if being used by  other parts of app, keep in utils.
-export async function executeQueries(userQuery) {
+export async function executeQueries(userQuery, parameters) {
   try {
     /* Self-Notes:
     Creating the biztime client inside the try block restricts its scope to that block.
@@ -30,7 +30,7 @@ export async function executeQueries(userQuery) {
     //Establish DB connection
     await biztime.connect();
 
-    const result = await biztime.query(userQuery);
+    const result = await biztime.query(userQuery, parameters);
     await biztime.end();
     return result;
   } catch (error) {
