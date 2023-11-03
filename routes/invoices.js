@@ -15,7 +15,7 @@ invoicesRouter.get("/", async function (req, res, next) {
     });
     return res.json({ invoices: result });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -39,28 +39,24 @@ invoicesRouter.get("/:id", async function (req, res, next) {
       throw new ExpressError("Company Not Found", 404);
     }
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
 invoicesRouter.post("/", async function (req, res, next) {
   try {
-    const postQuery = `INSERT INTO invoices (comp_code, amt, paid, add_date, paid_date) VALUES ($1, $2, false, CURRENT_DATE, null)`;
+    const postQuery = `INSERT INTO invoices (comp_code, amt, paid, add_date, paid_date) VALUES ($1, $2, false, CURRENT_DATE, null) RETURNING *`;
+
     const response = await executeQueries(postQuery, [
       req.body.comp_code,
       req.body.amt,
     ]);
 
-    const lastRowQuery = `SELECT * FROM invoices
-    ORDER BY id DESC
-    LIMIT 1;`;
-    const idResponse = await executeQueries(lastRowQuery);
-
     return res.json({
-      invoice: idResponse.rows[0],
+      invoice: response.rows[0],
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -69,22 +65,19 @@ invoicesRouter.put("/:id", async function (req, res, next) {
     let updateQuery;
     let params = [req.body.amt, req.params.id];
     if (req.body.paid === "true") {
-      updateQuery = `UPDATE invoices SET amt = $1, paid = 'true', paid_date = CURRENT_DATE WHERE id = $2`;
+      updateQuery = `UPDATE invoices SET amt = $1, paid = 'true', paid_date = CURRENT_DATE WHERE id = $2 RETURNING *`;
     } else if (req.body.paid === "false") {
-      updateQuery = `UPDATE invoices SET amt = $1, paid = 'false', paid_date = null WHERE id = $2`;
+      updateQuery = `UPDATE invoices SET amt = $1, paid = 'false', paid_date = null WHERE id = $2 RETURNING *`;
     } else {
-      updateQuery = `UPDATE invoices SET amt = $1 WHERE id = $2`;
+      updateQuery = `UPDATE invoices SET amt = $1 WHERE id = $2 RETURNING *`;
     }
-    await executeQueries(updateQuery, params);
-
-    const idQuery = `SELECT * FROM invoices WHERE id = $1`;
-    const idResponse = await executeQueries(idQuery, [req.params.id]);
+    const response = await executeQueries(updateQuery, params);
 
     return res.json({
-      invoice: idResponse.rows[0],
+      invoice: response.rows[0],
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -99,6 +92,6 @@ invoicesRouter.delete("/:id", async function (req, res, next) {
       throw new ExpressError("Company Not Found", 404);
     }
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });

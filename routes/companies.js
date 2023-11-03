@@ -17,7 +17,7 @@ companiesRouter.get("/", async function (req, res, next) {
 
     return res.json({ companies: result });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -42,46 +42,44 @@ companiesRouter.get("/:code", async function (req, res, next) {
       throw new ExpressError("Company Not Found", 404);
     }
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
 companiesRouter.post("/", async function (req, res, next) {
   try {
     const companyCode = slugify(req.body.name);
-    const putQuery = `INSERT INTO companies (code, name, description) VALUES ($1, $2, $3)`;
+    const putQuery = `INSERT INTO companies (code, name, description) VALUES ($1, $2, $3) RETURNING code, name, description`;
 
-    await executeQueries(putQuery, [
+    const response = await executeQueries(putQuery, [
       companyCode,
       req.body.name,
       req.body.description,
     ]);
 
-    const getQuery = `SELECT * FROM companies WHERE code = $1`;
-    const getResponse = await executeQueries(getQuery, [companyCode]);
+    // Note: Leaving for informational purpose. Replaced the 3 lines below with RETURN clause in the SQL queries.
+    // const getQuery = `SELECT * FROM companies WHERE code = $1`;
+    // const getResponse = await executeQueries(getQuery, [companyCode]);
+    // return res.status(201).json({ company: getResponse.rows[0] });
 
-    return res.json({ company: getResponse.rows[0] });
+    return res.status(201).json({ company: response.rows[0] });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
 companiesRouter.put("/:code", async function (req, res, next) {
   try {
-    const updateQuery = `UPDATE companies SET name = $1, description = $2 WHERE code = $3`;
+    const updateQuery = `UPDATE companies SET name = $1, description = $2 WHERE code = $3 RETURNING code, name, description`;
 
-    await executeQueries(updateQuery, [
+    const response = await executeQueries(updateQuery, [
       req.body.name,
       req.body.description,
       req.params.code,
     ]);
-
-    const getQuery = `SELECT * FROM companies WHERE code = $1`;
-    const getResponse = await executeQueries(getQuery, [req.params.code]);
-
-    return res.json({ company: getResponse.rows[0] });
+    return res.json({ company: response.rows[0] });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -95,6 +93,6 @@ companiesRouter.delete("/:code", async function (req, res, next) {
       throw new ExpressError("Company Not Found", 404);
     }
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
