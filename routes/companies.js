@@ -34,9 +34,16 @@ companiesRouter.get("/:code", async function (req, res, next) {
         companyCode,
       ]);
 
+      const industryQuery = `SELECT industry FROM companies JOIN itype ON companies.code=itype.companies_code JOIN industries ON itype.industries_code=industries.code WHERE companies.code=$1`;
+      const industryResponse = await executeQueries(industryQuery, [
+        companyCode,
+      ]);
+      const industries = industryResponse.rows.map((obj) => obj.industry);
+
       return res.json({
         company: companiesResponse.rows[0],
         invoices: invoicesResponse.rows,
+        industries: industries,
       });
     } else {
       throw new ExpressError("Company Not Found", 404);

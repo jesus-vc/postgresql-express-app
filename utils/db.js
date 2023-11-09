@@ -7,7 +7,7 @@ let DB_URI;
 if (process.env.NODE_ENV === "test") {
   DB_URI = "postgresql:///biztime_test";
 } else {
-  DB_URI = "postgresql:///biztime";
+  DB_URI = "postgresql:///biztime_mn";
 }
 
 //TODO export to controllers if this function is being used only by routers. if being used by  other parts of app, keep in utils.
